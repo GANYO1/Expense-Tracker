@@ -1,6 +1,27 @@
+# Virtual Environment
+.venv/
 venv/
-.env
-__pycache__/
-instance/
-*.pyc
+env/
 
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Instance folder (Flask)
+instance/
+
+# Database files
+*.db
+*.sqlite3
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
