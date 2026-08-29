@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from marshmallow import Schema, fields, ValidationError
-from datetime import datetime
+from marshmallow import Schema, fields, validate, ValidationError
+# from datetime import datetime
 
 from app.models import db
 from app.models.income import Income
@@ -13,15 +13,22 @@ income_bp = Blueprint('income', __name__)
 
 class IncomeSchema(Schema):
     """Schema for creating income"""
-    amount = fields.Float(required=True)
+    amount = fields.Decimal(
+        required=True,
+        places=2,
+        validate=validate.Range(min=0, min_inclusive=False)
+    )
     source = fields.String(required=True)
-    description = fields.String(required=False)
+    description = fields.String(
+        required=False, 
+        validate=validate.Length(min=1)
+    )
     category_id = fields.Int(required=False)
     date = fields.Date(required=True)
 
 class UpdateIncomeSchema(Schema):
     """Schema for updating income (all fields optional)"""
-    amount = fields.Float(required=False)
+    amount = fields.Decimal(required=False)
     source = fields.String(required=False)
     description = fields.String(required=False)
     category_id = fields.Int(required=False)

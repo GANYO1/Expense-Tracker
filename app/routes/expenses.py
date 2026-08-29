@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from marshmallow import Schema, fields, ValidationError
+from marshmallow import Schema, fields, validate, ValidationError
 # from datetime import datetime
 
 from app.models import db
@@ -13,17 +13,22 @@ expense_bp = Blueprint('expense', __name__)
 
 class ExpenseSchema(Schema):
     """Schema for creating an expense"""
-    amount = fields.Float(required=True)
-    description = fields.String(required=True)
+    amount = fields.Decimal(
+        required=True,
+        places=2,
+        validate=validate.Range(min=0, min_inclusive=False) # must be > 0
+    )
+    description = fields.String(required=True, validate=validate.Length(min=1))
     category_id = fields.Int(required=True)
     date = fields.Date(required=True)
 
 class UpdateExpenseSchema(Schema):
     """Schema for updating an expense (all fields optional)"""
-    amount = fields.Float(required=False)
+    amount = fields.Decimal(required=False)
     description = fields.String(required=False)
     category_id = fields.Int(required=False)
     date = fields.Date(required=False)
+
 
 expense_schema = ExpenseSchema()
 expenses_schema = ExpenseSchema(many=True)
@@ -171,3 +176,6 @@ def delete_expense(expense_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+
+

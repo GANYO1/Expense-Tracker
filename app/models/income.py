@@ -1,11 +1,13 @@
 from app.models import db
+from sqlalchemy import CheckConstraint
+from sqlalchemy.orm import validates
 from datetime import datetime
 
 class Income(db.Model):
     __tablename__ = 'incomes'
 
     id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float, nullable=False)
+    amount = db.Column(db.Numeric(12, 2), nullable=False)
     source = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     date = db.Column(db.Date, nullable=False, index=True)
@@ -16,6 +18,19 @@ class Income(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    __table_args__ = (
+        CheckConstraint('amount > 0', name='check_amount_positive'),
+    )
+
+    @validates('amount')
+    def validate_amount(self, amount):
+        if amount is None:
+            raise ValueError('Amount is required')
+        if not isinstance(amount, (int, float)) or amount <= 0:
+            raise ValueError('Amount must be a number greater than zero')
+        return amount
+
+    
     def to_dict(self):
         return {
             'id': self.id,
