@@ -1,6 +1,6 @@
 # Expense Tracker
 
-A full-stack personal finance tracking application that allows users to register, log in, manage income and expenses, organize transactions by categories, and view financial summaries.
+A personal finance tracking API that allows users to register, log in, manage income and expenses, organize transactions by categories, and view financial summaries.
 
 ## Features
 
@@ -76,7 +76,8 @@ SQLALCHEMY_DATABASE_URI=sqlite:///expense_tracker.db
 python run.py
 
 Backend will run on:
-http://127.0.0.1:5000
+## Live API
+Base URL: https://expense-tracker-1qo7.onrender.com
 
 ### API Endpoints
 Authentication
@@ -111,6 +112,8 @@ Create categories
 Add income and expenses
 View financial summary on the dashboard
 
+### Deployed to render
+
 ## Future Improvements
 
 Edit and delete functionality on the frontend
@@ -118,7 +121,6 @@ Category dropdown instead of manual category ID
 Better UI/UX design
 Expense filtering by date and category
 User profile settings
-Deployment (Render / Railway / VPS)
 
 ## Author
 GitHub: GANYO-1
